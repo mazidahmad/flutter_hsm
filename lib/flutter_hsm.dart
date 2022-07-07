@@ -19,19 +19,17 @@ class FlutterHardwareSecureModule extends FlutterHsmInterface {
   @override
   Future<Uint8List?> encrypt({required String message, required AccessControlHsm accessControl, String? publicKeyString}) async{
     try {
-      switch(Platform.localeName){
+      switch(Platform.operatingSystem){
         case "ios":
         case "macos":
           if (publicKeyString != null){
             var result = await _secureEnclave.encryptWithPublicKey(message: message, publicKeyString: publicKeyString);
-            return result.decoder((value) => value);
+            return result.value;
           }else{
-            assert(accessControl != null);
             var result = await _secureEnclave.encrypt(message: message, accessControl: accessControl);
-            return result.decoder((value) => value);
+            return result.value;
           }
         case "android":
-          assert(accessControl != null);
           return await _flutterKeystore.encrypt(accessControl: keystore.AccessControl(tag: accessControl.tag, setUserAuthenticatedRequired: false), message: message);
         default: throw Exception("Platform not supported");
       }
@@ -43,11 +41,11 @@ class FlutterHardwareSecureModule extends FlutterHsmInterface {
   @override
   Future<String?> decrypt({required Uint8List message,required AccessControlHsm accessControl}) async{
     try {
-      switch(Platform.localeName){
+      switch(Platform.operatingSystem){
         case "ios":
         case "macos":
           var result = await _secureEnclave.decrypt(message: message, accessControl: accessControl);
-            return result.decoder((value) => value);
+            return result.value;
         case "android":
           return await _flutterKeystore.decrypt(message: message, accessControl: keystore.AccessControl(tag: accessControl.tag, setUserAuthenticatedRequired: false));
         default: throw Exception("Platform not supported");
