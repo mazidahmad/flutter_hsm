@@ -1,0 +1,23 @@
+name: flutter_hsm
+description: Flutter hardware secure module storage.
+version: 0.0.1
+homepage:
+
+environment:
+  sdk: ">=2.17.3 <3.0.0"
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  secure_enclave: ^0.0.2+rev1
+  flutter_secure_storage: ^5.0.2
+  flutter_keystore:
+    git:
+      url: https://github.com/mazidahmad/flutter_keystore.git
+  
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
