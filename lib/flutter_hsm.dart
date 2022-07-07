@@ -8,6 +8,9 @@ import 'package:flutter_hsm/src/model/access_control_hsm.dart';
 import 'package:flutter_keystore/flutter_keystore.dart' as keystore;
 import 'package:secure_enclave/secure_enclave.dart';
 
+export 'package:flutter_hsm/src/model/access_control_hsm.dart';
+export 'package:secure_enclave/src/model/access_control.dart';
+
 class FlutterHardwareSecureModule extends FlutterHsmInterface {
   
   final SecureEnclave _secureEnclave = SecureEnclave();
