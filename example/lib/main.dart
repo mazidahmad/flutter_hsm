@@ -21,7 +21,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final _secureEnclavePlugin = FlutterHardwareSecureModule();
+  final _hsmPackage = FlutterHardwareSecureModule();
   final String tag = "keychain-coinbit.privateKey";
   final String tagBiometric = "keychain-coinbit.privateKeyPresence";
   bool _isRequiresBiometric = false;
@@ -39,7 +39,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void encrypt(String message) {
-    _secureEnclavePlugin.encrypt(message: message, accessControl: AccessControlHsm(
+    _hsmPackage.encrypt(message: message, accessControl: AccessControlHsm(
       options: _isRequiresBiometric? [AccessControlOption.userPresence, AccessControlOption.privateKeyUsage] : [AccessControlOption.privateKeyUsage],
       tag: _isRequiresBiometric ? tagBiometric : tag,)).then((result) =>
         setState(() {
@@ -54,7 +54,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void encryptWithPublicKey(String message) {
-    _secureEnclavePlugin.encrypt(
+    _hsmPackage.encrypt(
         message: message,
         accessControl: AccessControlHsm(
           options: _isRequiresBiometric? [AccessControlOption.userPresence, AccessControlOption.privateKeyUsage] : [AccessControlOption.privateKeyUsage],
@@ -72,7 +72,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void decrypt(Uint8List message) {
-    _secureEnclavePlugin.decrypt(
+    _hsmPackage.decrypt(
        message: message, accessControl: AccessControlHsm(
       options: _isRequiresBiometric? [AccessControlOption.userPresence, AccessControlOption.privateKeyUsage] : [AccessControlOption.privateKeyUsage],
       tag: _isRequiresBiometric ? tagBiometric : tag,))
@@ -89,7 +89,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   // void getPublicKey() {
-  //   _secureEnclavePlugin.getPublicKey(
+  //   _hsmPackage.getPublicKey(
   //       accessControl: AccessControl(
   //       options: _isRequiresBiometric? [AccessControlOption.userPresence, AccessControlOption.privateKeyUsage] : [AccessControlOption.privateKeyUsage],
   //       tag: _isRequiresBiometric ? tagBiometric : tag,)).then((
@@ -106,16 +106,16 @@ class _MyAppState extends State<MyApp> {
   // }
 
   // Future<void> removeKey() async {
-  //   await _secureEnclavePlugin.removeKey(tag).then((result) {
+  //   await _hsmPackage.removeKey(tag).then((result) {
   //     print("delete $tag = ${result.value}");
   //   });
-  //   await _secureEnclavePlugin.removeKey(tagBiometric).then((result) {
+  //   await _hsmPackage.removeKey(tagBiometric).then((result) {
   //     print("delete $tagBiometric = ${result.value}");
   //   });
   // }
 
   // void cobaError() {
-  //   _secureEnclavePlugin.cobaError().then((result) {
+  //   _hsmPackage.cobaError().then((result) {
   //     if (result.error == null) {
   //       print("Kok Sukses???");
   //     } else {
