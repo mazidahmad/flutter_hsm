@@ -1,8 +1,5 @@
 # This is a generated file; do not edit or check into version control.
-flutter_keystore=/Users/mazidahmad/development/flutter/.pub-cache/git/flutter_keystore-f7fd1db8900ccd44e8e30cce1ca115af04214ff8/
-flutter_secure_storage=/Users/mazidahmad/development/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_secure_storage-5.0.2/
-flutter_secure_storage_linux=/Users/mazidahmad/development/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_secure_storage_linux-1.1.0/
-flutter_secure_storage_macos=/Users/mazidahmad/development/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_secure_storage_macos-1.1.0/
-flutter_secure_storage_web=/Users/mazidahmad/development/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_secure_storage_web-1.0.2/
-flutter_secure_storage_windows=/Users/mazidahmad/development/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_secure_storage_windows-1.1.2/
+flutter_keystore=/Users/mazidahmad/development/flutter/.pub-cache/git/flutter_keystore-32d259a6426a17e48efbc341011314886cd9cb28/
+flutter_plugin_android_lifecycle=/Users/mazidahmad/development/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_plugin_android_lifecycle-2.0.6/
+local_auth_android=/Users/mazidahmad/development/flutter/.pub-cache/hosted/pub.dartlang.org/local_auth_android-1.0.5/
 secure_enclave=/Users/mazidahmad/development/flutter/.pub-cache/hosted/pub.dartlang.org/secure_enclave-0.0.2+rev1/

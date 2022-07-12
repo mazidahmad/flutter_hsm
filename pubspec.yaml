@@ -11,10 +11,10 @@ dependencies:
   flutter:
     sdk: flutter
   secure_enclave: ^0.0.2+rev1
-  flutter_secure_storage: ^5.0.2
   flutter_keystore:
     git:
       url: https://github.com/mazidahmad/flutter_keystore.git
+      ref: feature/biometric
   
 
 dev_dependencies:

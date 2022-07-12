@@ -41,6 +41,7 @@ class _MyAppState extends State<MyApp> {
   void encrypt(String message) {
     _hsmPackage.encrypt(message: message, accessControl: AccessControlHsm(
       options: _isRequiresBiometric? [AccessControlOption.userPresence, AccessControlOption.privateKeyUsage] : [AccessControlOption.privateKeyUsage],
+      authRequired: _isRequiresBiometric,
       tag: _isRequiresBiometric ? tagBiometric : tag,)).then((result) =>
         setState(() {
           // if (result.error == null) {
@@ -58,6 +59,7 @@ class _MyAppState extends State<MyApp> {
         message: message,
         accessControl: AccessControlHsm(
           options: _isRequiresBiometric? [AccessControlOption.userPresence, AccessControlOption.privateKeyUsage] : [AccessControlOption.privateKeyUsage],
+           authRequired: _isRequiresBiometric,
           tag: _isRequiresBiometric ? tagBiometric : tag,),
         publicKeyString: publicKey).then((result) =>
         setState(() {
@@ -75,6 +77,7 @@ class _MyAppState extends State<MyApp> {
     _hsmPackage.decrypt(
        message: message, accessControl: AccessControlHsm(
       options: _isRequiresBiometric? [AccessControlOption.userPresence, AccessControlOption.privateKeyUsage] : [AccessControlOption.privateKeyUsage],
+       authRequired: _isRequiresBiometric,
       tag: _isRequiresBiometric ? tagBiometric : tag,))
         .then((result) =>
         setState(() {

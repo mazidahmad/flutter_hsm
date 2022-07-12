@@ -1,5 +1,5 @@
-name: secure_enclave_example
-description: Demonstrates how to use the secure_enclave plugin.
+name: flutter_hsm_example
+description: Demonstrates how to use the flutter_hsm plugin.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
