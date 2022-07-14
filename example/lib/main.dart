@@ -1,11 +1,8 @@
-import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'dart:async';
 
 import 'package:flutter_hsm/flutter_hsm.dart';
-import 'package:flutter_hsm/src/model/access_control_hsm.dart';
 
 final _messangerKey = GlobalKey<ScaffoldMessengerState>();
 
@@ -44,32 +41,7 @@ class _MyAppState extends State<MyApp> {
       authRequired: _isRequiresBiometric,
       tag: _isRequiresBiometric ? tagBiometric : tag,)).then((result) =>
         setState(() {
-          // if (result.error == null) {
             encrypted = result ?? Uint8List(0);
-          // } else {
-          //   final error = result.error!;
-          //   _messangerKey.currentState?.showSnackBar(SnackBar(content: Text(
-          //       'code = ${error.code}  |  desc = ${error.desc}')));
-          // }
-        }));
-  }
-
-  void encryptWithPublicKey(String message) {
-    _hsmPackage.encrypt(
-        message: message,
-        accessControl: AccessControlHsm(
-          options: _isRequiresBiometric? [AccessControlOption.userPresence, AccessControlOption.privateKeyUsage] : [AccessControlOption.privateKeyUsage],
-           authRequired: _isRequiresBiometric,
-          tag: _isRequiresBiometric ? tagBiometric : tag,),
-        publicKeyString: publicKey).then((result) =>
-        setState(() {
-          // if (result.error == null) {
-            encryptedWithPublicKey = result ?? Uint8List(0);
-          // } else {
-          //   final error = result.error!;
-          //   _messangerKey.currentState?.showSnackBar(SnackBar(content: Text(
-          //       'code = ${error.code}  |  desc = ${error.desc}')));
-          // }
         }));
   }
 
@@ -81,53 +53,9 @@ class _MyAppState extends State<MyApp> {
       tag: _isRequiresBiometric ? tagBiometric : tag,))
         .then((result) =>
         setState(() {
-          // if (result.error == null) {
             decrypted = result ?? "";
-          // } else {
-          //   final error = result.error!;
-          //   _messangerKey.currentState?.showSnackBar(SnackBar(content: Text(
-          //       'code = ${error.code}  |  desc = ${error.desc}')));
-          // }
         }));
   }
-
-  // void getPublicKey() {
-  //   _hsmPackage.getPublicKey(
-  //       accessControl: AccessControl(
-  //       options: _isRequiresBiometric? [AccessControlOption.userPresence, AccessControlOption.privateKeyUsage] : [AccessControlOption.privateKeyUsage],
-  //       tag: _isRequiresBiometric ? tagBiometric : tag,)).then((
-  //       result) {
-  //     if (result.error == null) {
-  //       publicKey = result.value ?? "";
-  //       setState(() {});
-  //     } else {
-  //       final error = result.error!;
-  //       _messangerKey.currentState?.showSnackBar(SnackBar(
-  //           content: Text('code = ${error.code}  |  desc = ${error.desc}')));
-  //     }
-  //   });
-  // }
-
-  // Future<void> removeKey() async {
-  //   await _hsmPackage.removeKey(tag).then((result) {
-  //     print("delete $tag = ${result.value}");
-  //   });
-  //   await _hsmPackage.removeKey(tagBiometric).then((result) {
-  //     print("delete $tagBiometric = ${result.value}");
-  //   });
-  // }
-
-  // void cobaError() {
-  //   _hsmPackage.cobaError().then((result) {
-  //     if (result.error == null) {
-  //       print("Kok Sukses???");
-  //     } else {
-  //       final error = result.error!;
-  //       _messangerKey.currentState?.showSnackBar(SnackBar(
-  //           content: Text('code = ${error.code}  |  desc = ${error.desc}')));
-  //     }
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -168,27 +96,6 @@ class _MyAppState extends State<MyApp> {
             Text(
                 decrypted
             ),
-            // Divider(),
-            // TextButton(onPressed: () {
-            //   removeKey();
-            // }, child: Text("reset key")),
-            // Divider(),
-            // TextButton(onPressed: () {
-            //   cobaError();
-            // }, child: Text("coba Error")),
-            // Divider(),
-            // Text(publicKey),
-            // TextButton(onPressed: () {
-            //   getPublicKey();
-            // }, child: Text("get public key")),
-            // TextButton(onPressed: () {
-            //   encryptWithPublicKey(input.text);
-            // }, child: Text("encrypt with public key")),
-            // Text(encryptedWithPublicKey.toString()),
-            // TextButton(onPressed: () {
-            //   decrypted = "";
-            //   decrypt(encryptedWithPublicKey);
-            // }, child: Text("decrypt from encryptedWithPublicKey")),
           ],
         ),
       ),
