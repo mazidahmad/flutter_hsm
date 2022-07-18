@@ -9,15 +9,15 @@ import 'package:flutter_hsm/src/model/access_control_hsm.dart';
 
 export 'package:flutter_hsm/src/model/access_control_hsm.dart';
 export 'package:secure_enclave/src/model/access_control.dart';
+export 'package:flutter_keystore/src/model/android_prompt_info.dart';
 
 class FlutterHardwareSecureModule extends FlutterHsmInterface {
-
   factory FlutterHardwareSecureModule() => _instance;
 
   late FlutterHsmInterface _package;
 
-  FlutterHardwareSecureModule._(){
-    switch(Platform.operatingSystem){
+  FlutterHardwareSecureModule._() {
+    switch (Platform.operatingSystem) {
       case 'ios':
       case 'macos':
         _package = IosHsmImpl();
@@ -25,19 +25,25 @@ class FlutterHardwareSecureModule extends FlutterHsmInterface {
       case 'android':
         _package = AndroidHsm();
         break;
-      default: throw Exception("Platform not supported");
+      default:
+        throw Exception("Platform not supported");
     }
   }
 
-  static final FlutterHardwareSecureModule _instance = FlutterHardwareSecureModule._();
+  static final FlutterHardwareSecureModule _instance =
+      FlutterHardwareSecureModule._();
 
   @override
-  Future<String?> decrypt({required Uint8List message, required AccessControlHsm accessControl}) {
+  Future<String?> decrypt(
+      {required Uint8List message, required AccessControlHsm accessControl}) {
     return _package.decrypt(message: message, accessControl: accessControl);
   }
 
   @override
-  Future<Uint8List?> encrypt({required String message, required AccessControlHsm accessControl, String? publicKeyString}) {
+  Future<Uint8List?> encrypt(
+      {required String message,
+      required AccessControlHsm accessControl,
+      String? publicKeyString}) {
     return _package.encrypt(message: message, accessControl: accessControl);
   }
 }
