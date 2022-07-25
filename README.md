@@ -23,11 +23,40 @@ Complete usage in `/example` folder.
 ```dart
 
 final  _hsmPackage  =  FlutterHardwareSecureModule();
+final IosOptions _iosOptions;
+final AndroidOptions _androidOptions;
+final AndroidPromptInfo _androidPromptInfo;
 
-var encryptedData = _hsmPackage.encrypt(message:  "A string to encrypt", accessControl:  AccessControlHsm(options [AccessControlOption.userPresence, AccessControlOption.privateKeyUsage] authRequired:  true, tag: "TAG",))
+_androidPromptInfo = AndroidPromptInfo(
+        title: "Confirm Biometric",
+        confirmationRequired: false,
+        negativeButton: "Cancel Auth");
+    _iosOptions = IosOptions(
+      options: _isRequiresBiometric
+          ? [
+              AccessControlOption.userPresence,
+              AccessControlOption.privateKeyUsage
+            ]
+          : [AccessControlOption.privateKeyUsage],
+      tag: "TAG",
+    );
+    _androidOptions = AndroidOptions(
+        authRequired: true,
+        tag: "TAG",
+        androidPromptInfo: _androidPromptInfo,
+        oncePrompt: true,
+        authValidityDuration: 10);
 
-var decryptedData = _hsmPackage.decrypt(message:  encryptedData, accessControl:  AccessControlHsm(options [AccessControlOption.userPresence, AccessControlOption.privateKeyUsage],
-authRequired:  true, tag: "TAG",))
+var encryptedData = _hsmPackage.encrypt(
+            message: message,
+            iosOptions: _iosOptions,
+            androidOptions: _androidOptions)
+
+var decryptedData = _hsmPackage
+        .decrypt(
+            message: message,
+            iosOptions: _iosOptions,
+            androidOptions: _androidOptions)
 ```
 
   
