@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter_hsm/src/flutter_hsm_interface.dart';
-import 'package:flutter_hsm/src/model/access_control_hsm.dart';
+import 'package:flutter_hsm/src/model/ios_options.dart';
 import 'package:flutter_keystore/flutter_keystore.dart';
 
 class AndroidHsm extends FlutterHsmInterface {
@@ -10,24 +10,27 @@ class AndroidHsm extends FlutterHsmInterface {
   @override
   Future<String?> decrypt(
       {required Uint8List message,
-      required AccessControlHsm accessControl}) async {
+      IosOptions? iosOptions,
+      AndroidOptions? androidOptions}) async {
     return await _flutterKeystore.decrypt(
-        message: message,
-        accessControl: AccessControl(
-            tag: accessControl.tag,
-            setUserAuthenticatedRequired: accessControl.authRequired));
+        message: message, options: androidOptions!);
   }
 
   @override
   Future<Uint8List?> encrypt(
       {required String message,
-      required AccessControlHsm accessControl,
+      IosOptions? iosOptions,
+      AndroidOptions? androidOptions,
       String? publicKeyString}) async {
     return await _flutterKeystore.encrypt(
-      accessControl: AccessControl(
-          tag: accessControl.tag,
-          setUserAuthenticatedRequired: accessControl.authRequired),
+      options: androidOptions!,
       message: message,
     );
+  }
+
+  @override
+  Future<void> reset(
+      {IosOptions? iosOptions, AndroidOptions? androidOptions}) async {
+    await _flutterKeystore.resetConfiguration(options: androidOptions!);
   }
 }

@@ -33,7 +33,8 @@ class _MyAppState extends State<MyApp> {
 
   List<String> _listData = [];
 
-  late AccessControlHsm _accessControl;
+  late IosOptions _iosOptions;
+  late AndroidOptions _androidOptions;
   late AndroidPromptInfo _androidPromptInfo;
 
   void saveData() async {
@@ -41,12 +42,38 @@ class _MyAppState extends State<MyApp> {
     await prefs.setStringList("datas", _listData);
   }
 
+  void saveBiometric(value) async {
+    var prefs = await SharedPreferences.getInstance();
+    await prefs.setBool("authRequired", value);
+    setState(() {
+      _iosOptions = _iosOptions.copyWith(tag: value ? tagBiometric : tag);
+      _androidOptions = _androidOptions.copyWith(
+          tag: value ? tagBiometric : tag, authRequired: value);
+    });
+  }
+
   void getData() async {
     getData();
     var prefs = await SharedPreferences.getInstance();
     setState(() {
       _listData = prefs.getStringList("datas") ?? [];
+      _isRequiresBiometric = prefs.getBool("authRequired") ?? false;
+      _androidOptions = _androidOptions.copyWith(
+          tag: _isRequiresBiometric ? tagBiometric : tag,
+          authRequired: _isRequiresBiometric);
+      _iosOptions =
+          _iosOptions.copyWith(tag: _isRequiresBiometric ? tagBiometric : tag);
     });
+  }
+
+  void resetConfig(IosOptions iosOptions, AndroidOptions androidOptions) async {
+    var prefs = await SharedPreferences.getInstance();
+    prefs.clear();
+    setState(() {
+      _listData = [];
+    });
+    await _hsmPackage.reset(
+        iosOptions: iosOptions, androidOptions: androidOptions);
   }
 
   @override
@@ -57,21 +84,29 @@ class _MyAppState extends State<MyApp> {
         title: "Confirm Biometric",
         confirmationRequired: false,
         negativeButton: "Cancel Auth");
-    _accessControl = AccessControlHsm(
-        options: _isRequiresBiometric
-            ? [
-                AccessControlOption.userPresence,
-                AccessControlOption.privateKeyUsage
-              ]
-            : [AccessControlOption.privateKeyUsage],
+    _iosOptions = IosOptions(
+      options: _isRequiresBiometric
+          ? [
+              AccessControlOption.userPresence,
+              AccessControlOption.privateKeyUsage
+            ]
+          : [AccessControlOption.privateKeyUsage],
+      tag: _isRequiresBiometric ? tagBiometric : tag,
+    );
+    _androidOptions = AndroidOptions(
         authRequired: _isRequiresBiometric,
         tag: _isRequiresBiometric ? tagBiometric : tag,
-        promptInfo: _androidPromptInfo);
+        androidPromptInfo: _androidPromptInfo,
+        oncePrompt: true,
+        authValidityDuration: 10);
   }
 
   void encrypt(String message) {
     _hsmPackage
-        .encrypt(message: message, accessControl: _accessControl)
+        .encrypt(
+            message: message,
+            iosOptions: _iosOptions,
+            androidOptions: _androidOptions)
         .then((result) => setState(() {
               encrypted = result ?? Uint8List(0);
               _listData.add(String.fromCharCodes(encrypted));
@@ -81,7 +116,10 @@ class _MyAppState extends State<MyApp> {
 
   void decrypt(Uint8List message) {
     _hsmPackage
-        .decrypt(message: message, accessControl: _accessControl)
+        .decrypt(
+            message: message,
+            iosOptions: _iosOptions,
+            androidOptions: _androidOptions)
         .then((result) => setState(() {
               decrypted = result ?? "";
             }));
@@ -113,15 +151,21 @@ class _MyAppState extends State<MyApp> {
                         _isRequiresBiometric = value;
                         encrypted = Uint8List(0);
                         decrypted = "";
-                        _accessControl = _accessControl.copyWith(
-                            tag: value ? tagBiometric : tag,
-                            options: value
-                                ? [
-                                    AccessControlOption.userPresence,
-                                    AccessControlOption.privateKeyUsage
-                                  ]
-                                : [AccessControlOption.privateKeyUsage],
-                            authRequired: value);
+                        _iosOptions = _iosOptions.copyWith(
+                          tag: value ? tagBiometric : tag,
+                          options: value
+                              ? [
+                                  AccessControlOption.userPresence,
+                                  AccessControlOption.privateKeyUsage
+                                ]
+                              : [AccessControlOption.privateKeyUsage],
+                        );
+                        _androidOptions = AndroidOptions(
+                          authRequired: value,
+                          tag: value ? tagBiometric : tag,
+                        );
+                        resetConfig(_iosOptions, _androidOptions);
+                        saveBiometric(value);
                       });
                     }),
               ],

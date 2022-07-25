@@ -82,16 +82,16 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.0.1"
+    version: "0.1.1"
   flutter_keystore:
     dependency: transitive
     description:
       path: "."
-      ref: "feature/biometric"
-      resolved-ref: "190c15f105217be846c927fa279a51db188080d3"
+      ref: "feature/refactor-biometric"
+      resolved-ref: "88c422f7dc8bdaddbb45159a30780bb054c92d2b"
       url: "https://github.com/mazidahmad/flutter_keystore.git"
     source: git
-    version: "0.0.1"
+    version: "0.1.1"
   flutter_lints:
     dependency: "direct dev"
     description:
